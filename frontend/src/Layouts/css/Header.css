@@ -1,0 +1,62 @@
+.header-logo img {
+    max-width: 150px;  
+    height: auto;
+  }
+ 
+.tp-footer-area {
+  padding: 40px 0; /* Điều chỉnh chiều cao */
+}
+
+.tp-footer-area a {
+  text-decoration: none; 
+}
+
+.tp-footer-area a:hover {
+  text-decoration: underline;  
+}
+/* Sticky Header */
+#header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgb(240, 102, 109); 
+  box-shadow: 0 2px 5px rgba(235, 229, 229, 0.1); /* Tạo hiệu ứng đổ bóng */
+}
+
+ 
+body {
+  padding-top: 100px;  
+}
+.custom-search-form {
+  display: flex;
+  border: 2px solid #ff0000;
+  border-radius: 25px;
+  overflow: hidden;
+  max-width: 500px;
+  margin: auto;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.custom-search-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+.custom-search-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-search-button:hover {
+  background-color: #cc0000;
+}
+

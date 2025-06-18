@@ -1,0 +1,133 @@
+import { useEffect, useState } from "react";
+import "../../Layouts/css/Delivery.css"
+import { CiDeliveryTruck } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import { Button, Form, Modal } from "react-bootstrap";
+import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { jwtDecode } from 'jwt-decode';
+import numeral from "numeral";
+import {Api} from "../api/Api";
+
+const TabCancel = (props) => {
+    const { show, products, handleClose, handleShow } = props
+    const [orders, setOrders] = useState([]);
+
+    const formatCurrency = (value) => {
+        return numeral(value).format('0,0') + ' ₫';
+    };
+
+    const handleDanhgia = () => {
+        handleClose();
+        Swal.fire({
+            icon: 'success',
+            title: 'Cảm ơn bạn đã đánh giá!',
+            confirmButtonText: 'OK'
+        });
+        //return 0;
+
+    }
+
+    const [error, setError] = useState(null);
+
+    // Lấy danh sách đơn hàng theo trạng thái
+    const getOrders = async (userId, status) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${Api}/orders/user/${userId}/status?status=${status}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            setOrders(response.data.data || []);
+        } catch (error) {
+            console.error("Lỗi khi gọi đơn hàng theo user_id:", error);
+            setError("Không thể tải dữ liệu đơn hàng.");
+        }
+    };
+
+    // Sử dụng useEffect để gọi API khi component được tải
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const userId = decoded.id;
+                if (userId) {
+                    // Lấy đơn hàng theo trạng thái
+                    getOrders(userId, 2);  // 0 là trạng thái mặc định để lấy đơn hàng chưa giao
+                } else {
+                    console.error("Không tìm thấy userId trong token");
+                }
+            } catch (err) {
+                console.error("Lỗi khi giải mã token:", err);
+            }
+        } else {
+            console.error("Không tìm thấy token");
+        }
+    }, []); // Chạy 1 lần khi component được mount
+     return (
+        <>
+            <div className="font-sans mb-3">
+                <div className="bg-gray-100 mt-3">
+                    <input type="text" placeholder="Tìm kiếm..." className="form-control" />
+                </div>
+                <div>
+                    {orders.length > 0 ? (
+                        orders.map((item, index) => (
+                            <div className="bg-white p-4 mt-2" key={item.id}>
+                                <div className="d-flex justify-content-between d-inline">
+                                    <div className="d-flex flex-row d-block">
+                                        <p style={{ color: "red", fontWeight: "bold", fontSize: "18px" }}>
+                                            Đơn hàng thứ {index + 1}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <CiDeliveryTruck className="text-success" />
+                                        <span className="ml-1 me-2 border-right text-success">Giao hàng nhanh |</span>
+                                        <span className="text-danger"><b>Tiết kiệm</b></span>
+                                    </div>
+                                </div>
+                                <hr />
+                                {item.products.map((product, productIndex) => (
+                                    <div className="d-flex flex-row align-items-center" key={productIndex}>
+                                        <Link to="/##">
+                                            <img
+                    src={`http://localhost:3000/public/${product.image}`} 
+                                                alt={product.product_name}
+                                                style={{ width: '70px', height: '70px', marginRight: '10px' }}
+                                            />
+                                        </Link>
+                                        <div className="align-content-center ms-3">
+                                            <b>{product.product_name}</b>
+                                            <div>Số lượng: {product.quantity}</div>
+                                            <div>Giá: {formatCurrency(product.price)}</div>
+                                            <span className="text-success">Trả hàng miễn phí 15 ngày</span>
+                                        </div>
+                                    </div>
+                                ))}
+                                <hr />
+                                <div className="d-flex flex-row-reverse mb-5">
+                                    <span>Thành tiền: <b>{formatCurrency(item.total_money)}</b></span>
+                                </div>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        Đánh giá trước <span className="text-danger">15-10-2024</span><br />
+                                        <span className="text-danger">Nhận 200 Xu khi đánh giá</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="no-products"><div className="bg-img"></div></div>
+                    )}
+                </div>
+            </div>
+
+            {/* Modal đánh giá giữ nguyên */}
+        </>
+    );
+};
+export default TabCancel;

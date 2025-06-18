@@ -1,0 +1,67 @@
+.tp-footer-area {
+    padding: 40px 0;
+    color: white; /* Màu chữ */
+  }
+  
+  .tp-footer-widget {
+    margin-bottom: 30px;
+  }
+  
+  .tp-footer-widget-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  .tp-footer-widget ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .tp-footer-widget ul li {
+    margin-bottom: 10px;
+  }
+  
+  .tp-footer-widget a {
+    text-decoration: none;
+    color: white; /* Màu liên kết */
+  }
+  
+  .tp-footer-widget a:hover {
+    text-decoration: underline; /* Gạch chân khi hover */
+  }
+  
+  .tp-footer-social {
+    margin: 20px 0;
+  }
+  
+  .tp-footer-social a {
+    margin-right: 15px; /* Khoảng cách giữa các biểu tượng mạng xã hội */
+  }
+  
+  input[type="email"] {
+    padding: 10px;
+    width: calc(100% - 20px); /* Để có padding cho input */
+    margin-bottom: 10px;
+  }
+  
+  button {
+    padding: 10px 15px;
+    background-color: #007bff; /* Màu nền cho nút */
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3; /* Màu nền khi hover */
+  }
+  
+  .tp-footer-widget-content ul li a {
+    color: black; /* Đặt màu đen cho tất cả các liên kết trong danh sách */
+  }
+  .tp-footer-area {
+    border: none !important; /* Bỏ border */
+    outline: none !important; /* Bỏ outline nếu có */
+  }
+  

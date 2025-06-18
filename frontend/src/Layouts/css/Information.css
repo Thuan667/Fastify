@@ -1,0 +1,57 @@
+.information-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .information-left,
+  .information-right {
+    width: 48%;
+  }
+  
+  .information-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .information-title {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    text-transform: uppercase;
+    font-size: 24px;
+    width: 100%;
+    text-align: center;
+    border: 2px solid black; /* Thêm viền cho thanh tiêu đề */
+    border-radius: 8px; /* Bo tròn các góc của thanh tiêu đề */
+  }
+  
+  .information-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .information-item {
+    display: flex;
+    align-items: center;
+   
+    padding: 10px;
+  }
+  
+  .information-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid #ccc; /* Thêm viền cho các item */
+    border-radius: 8px; /* Bo tròn các góc của các item */
+    margin-right: 20px;
+  }
+  
+  .information-text {
+    flex-grow: 1;
+    font-size: 18px;
+    color: #333;
+  }
+  

@@ -1,0 +1,9 @@
+.main-nav a {
+    text-decoration: none; /* Bỏ gạch chân */
+    color: inherit; /* Giữ màu sắc mặc định của văn bản */
+  }
+  
+  .main-nav a:hover {
+    text-decoration: underline; /* Thêm gạch chân khi hover, nếu muốn */
+  }
+  

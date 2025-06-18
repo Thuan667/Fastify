@@ -1,0 +1,11 @@
+.carousel img {
+    height: 400px; /* Chiều cao của banner */
+    object-fit: cover;
+  }
+  
+  .carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* Hiệu ứng nền tối cho văn bản */
+    padding: 20px;
+    border-radius: 10px;
+  }
+  

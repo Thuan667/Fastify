@@ -1,0 +1,48 @@
+.sport-container {
+    text-align: center;
+    margin: 40px 0;
+    padding: 0 20px;
+  }
+  
+  .sport-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  .sport-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .sport-item {
+    display: flex;
+    align-items: center;
+    margin: 15px;
+    padding: 20px;
+     
+    border-radius: 8px;
+    width: 250px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .sport-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .sport-image {
+    width: 130px; /* Kích thước lớn hơn */
+    height: 130px; /* Hình vuông */
+    margin-right: 20px;
+    object-fit: cover;
+    /* border-radius: 50%;  Bỏ đường viền hình tròn */
+  }
+  
+  .sport-name {
+    font-size: 25px;
+    color: #0f0e0e;
+  }
+  
