@@ -35,7 +35,8 @@ const userLoginSchema = {
               address: { type: 'string', description: 'Địa chỉ của người dùng' },
               phone: { type: 'string', description: 'Số điện thoại của người dùng' },
               created_at: { type: 'string', format: 'date-time', description: 'Thời gian người dùng được tạo' },
-              role: { type: 'string', description: 'Vai trò của người dùng trong hệ thống' }
+              role: { type: 'string', description: 'Vai trò của người dùng trong hệ thống' },
+
             }
           }
         }

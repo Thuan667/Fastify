@@ -67,27 +67,27 @@ const Header = (props) => {
     }
   };
 
-  useEffect(() => {
-    let intervalId;
+  // useEffect(() => {
+  //   let intervalId;
 
-    if (props.userData && props.userData.id) {
-      // Gọi lần đầu
-      fetchWishlistCount(props.userData.id);
-      fetchCartCount(props.userData.id);
+  //   if (props.userData && props.userData.id) {
+  //     // Gọi lần đầu
+  //     fetchWishlistCount(props.userData.id);
+  //     fetchCartCount(props.userData.id);
 
-      intervalId = setInterval(() => {
-        fetchWishlistCount(props.userData.id);
-        fetchCartCount(props.userData.id);
-      }, 1000);
-    } else {
-      setWishlistCount(0);
-      setCartCount(0);
-    }
+  //     intervalId = setInterval(() => {
+  //       fetchWishlistCount(props.userData.id);
+  //       fetchCartCount(props.userData.id);
+  //     }, 1000);
+  //   } else {
+  //     setWishlistCount(0);
+  //     setCartCount(0);
+  //   }
 
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [props.userData]);
+  //   return () => {
+  //     if (intervalId) clearInterval(intervalId);
+  //   };
+  // }, [props.userData]);
 
   // Lấy cartCount từ state local hoặc fallback props (Redux)
   const effectiveCartCount = cartCount || props.cartCount || 0;

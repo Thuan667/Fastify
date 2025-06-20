@@ -183,38 +183,74 @@ const updateProduct = async (db, id, {
   };
   
   const deleteProduct = async (db, id) => {
-    return new Promise((resolve, reject) => {
-      db.query(
-        `DELETE FROM products WHERE id = ?`,
-        [id],
-        (err, result) => {
+  return new Promise((resolve, reject) => {
+    // Kiểm tra shopping_carts
+    db.query('SELECT * FROM shopping_carts WHERE product_id = ?', [id], (err, cartRows) => {
+      if (err) {
+        console.error('Check shopping_carts error:', err.message);
+        return reject(err);
+      }
+
+      // Kiểm tra wishlists
+      db.query('SELECT * FROM wishlists WHERE product_id = ?', [id], (err, wishlistRows) => {
+        if (err) {
+          console.error('Check wishlists error:', err.message);
+          return reject(err);
+        }
+
+        if (cartRows.length > 0 || wishlistRows.length > 0) {
+          return reject(new Error('Không thể xóa: sản phẩm đang tồn tại trong giỏ hàng hoặc danh sách yêu thích.'));
+        }
+
+        // Không có trong cả hai, tiến hành xóa cứng
+        db.query('DELETE FROM products WHERE id = ?', [id], (err, result) => {
           if (err) {
             console.error('Delete error:', err.message);
             return reject(err);
           }
           resolve(result);
-        }
-      );
+        });
+      });
     });
-  };
+  });
+};
+
   
 
 
   const deleteProducttrash = async (db, id) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      `UPDATE products SET deleted_at = NOW() WHERE id = ?`,
-      [id],
-      (err, result) => {
+    // Kiểm tra shopping_carts
+    db.query('SELECT * FROM shopping_carts WHERE product_id = ?', [id], (err, cartRows) => {
+      if (err) {
+        console.error('Check shopping_carts error:', err.message);
+        return reject(err);
+      }
+
+      // Kiểm tra wishlists
+      db.query('SELECT * FROM wishlists WHERE product_id = ?', [id], (err, wishlistRows) => {
         if (err) {
-          console.error('Soft delete error:', err.message);
+          console.error('Check wishlists error:', err.message);
           return reject(err);
         }
-        resolve(result);
-      }
-    );
+
+        if (cartRows.length > 0 || wishlistRows.length > 0) {
+          return reject(new Error('Không thể đưa vào thùng rác: sản phẩm đang có trong giỏ hàng hoặc danh sách yêu thích.'));
+        }
+
+        // Không có trong cả hai, tiến hành xóa mềm
+        db.query('UPDATE products SET deleted_at = NOW() WHERE id = ?', [id], (err, result) => {
+          if (err) {
+            console.error('Soft delete error:', err.message);
+            return reject(err);
+          }
+          resolve(result);
+        });
+      });
+    });
   });
 };
+
 const getAll = async (db, page, limit, categoryId = null) => {
   return new Promise((resolve, reject) => {
     let countQuery = 'SELECT COUNT(*) AS total FROM products WHERE deleted_at IS NULL';

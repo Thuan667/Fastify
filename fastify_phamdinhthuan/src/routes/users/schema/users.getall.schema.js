@@ -29,7 +29,9 @@ const getAllUsersSchema = {
                                     phone: { type: 'string' },
                                     role: { type: 'string' },
                                     created_at: { type: 'number' },
-                                    updated_at: { type: 'number' }
+                                    updated_at: { type: 'number' },
+                                    is_locked: { type: 'string', description: 'Vai trò của người dùng trong hệ thống' }
+
                                 }
                             }
                         }

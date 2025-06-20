@@ -1,5 +1,12 @@
+const {
+  createReviewHandler,
+  getReviewsHandler,
+  adminReplyHandler,
+  getAllReviewsHandler,
+  getReviewsByProductId,
+  checkReviewHandler, // ➕ thêm handler
+} = require('../../handlers/reviewHandler');
 
-const { createReviewHandler, getReviewsHandler, adminReplyHandler,  getAllReviewsHandler } = require('../../handlers/reviewHandler');
 const { reviewSchema, adminReplySchema } = require('../reviews/schema/reviewSchema');
 
 async function reviewRoutes(fastify, options) {
@@ -9,8 +16,11 @@ async function reviewRoutes(fastify, options) {
     { schema: { body: reviewSchema } },
     createReviewHandler
   );
+fastify.get('/api/products/:productId/reviews/check', checkReviewHandler);
+
   // ✅ Admin xem tất cả đánh giá
   fastify.get('/api/admin/reviews', getAllReviewsHandler);
+
   // Người dùng xem đánh giá sản phẩm
   fastify.get('/api/products/:productId/reviews', getReviewsHandler);
 
@@ -20,6 +30,9 @@ async function reviewRoutes(fastify, options) {
     { schema: { body: adminReplySchema } },
     adminReplyHandler
   );
+
+  // API lấy tất cả đánh giá theo sản phẩm
+  fastify.get('/api/reviews/:productId', getReviewsByProductId);
 }
 
 module.exports = reviewRoutes;

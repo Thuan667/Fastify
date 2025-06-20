@@ -75,23 +75,41 @@ const createCategory = async(db, {category_name, slug, sort_order, parent,
             );
         });
     };
-        const delCategory = async(db,id)=>{
-            return new Promise((resolve,reject)=>{
-                db.query('DELETE FROM categories WHERE id = ?',[id],(err, result)=>{
-                    if(err){
-                        console.error('Error:',err.message);
-                        return reject;
-                
-                    }
-                    if(result.affectedRows === 0){
-                        resolve({Error:'Category not found'})
-                    }
-                    else{
-                        resolve({Message:'Category delete successfylly'})
-                    }
-                }) ;
-            })
-        }   
+const delCategory = async (db, id) => {
+  return new Promise((resolve, reject) => {
+    // Bước 1: Kiểm tra có sản phẩm nào thuộc danh mục này không
+    const checkProductQuery = 'SELECT COUNT(*) AS productCount FROM products WHERE product_category = ?';
+    db.query(checkProductQuery, [id], (err, checkResult) => {
+      if (err) {
+        console.error('Error checking products:', err.message);
+        return reject({ error: 'Lỗi kiểm tra sản phẩm' });
+      }
+
+      const count = checkResult[0].productCount;
+      if (count > 0) {
+        return resolve({
+          error: 'Không thể xóa danh mục. Đang có sản phẩm thuộc danh mục này.',
+        });
+      }
+
+      // Bước 2: Không có sản phẩm, tiến hành xóa danh mục
+      const deleteQuery = 'DELETE FROM categories WHERE id = ?';
+      db.query(deleteQuery, [id], (err, result) => {
+        if (err) {
+          console.error('Delete category error:', err.message);
+          return reject({ error: 'Lỗi khi xóa danh mục' });
+        }
+
+        if (result.affectedRows === 0) {
+          resolve({ error: 'Không tìm thấy danh mục' });
+        } else {
+          resolve({ message: 'Xóa danh mục thành công' });
+        }
+      });
+    });
+  });
+};
+
     
 module.exports={
     getAll,

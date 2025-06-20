@@ -114,7 +114,7 @@ const ListCategory = () => {
             fetchCategories();
         } catch (error) {
             console.error(error.response?.data);
-            Swal.fire("Lỗi", "Không thể xoá danh mục", "error");
+            Swal.fire("Lỗi", "Không thể xoá danh mục: Đang có sản phẩm thuộc danh mục này", "error");
         }
     };
 

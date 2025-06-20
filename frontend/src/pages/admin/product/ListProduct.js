@@ -79,7 +79,8 @@ class ListProduct extends Component {
         this.getTrashedProducts();
       })
       .catch((err) => {
-        console.error("Lỗi khi xóa mềm sản phẩm:", err);
+         Swal.fire("Lỗi khi xóa mềm sản phẩm:Sản phẩm đang tồn tại trong giỏ hàng hoặc danh sách yêu thích. Không thể xóa.", err);
+        
       });
   };
 
@@ -121,7 +122,7 @@ handlePermanentDeleteProduct = (productId) => {
           this.getTrashedProducts(); // Cập nhật lại danh sách thùng rác
         })
         .catch((error) => {
-          console.error("Lỗi khi xóa vĩnh viễn sản phẩm:", error);
+          Swal.fire("Lỗi khi xóa vĩnh viễn sản phẩm: Sản phẩm đang có thao tác.", error);
         });
     }
   });

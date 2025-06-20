@@ -8,13 +8,23 @@ const AdminReviews = () => {
   const [loading, setLoading] = useState(true);
   const [selectedReview, setSelectedReview] = useState(null);
   const [replyText, setReplyText] = useState('');
-
-  const [searchUser, setSearchUser] = useState('');
   const [filterStar, setFilterStar] = useState('all');
+  const [productIdFilter, setProductIdFilter] = useState('');
 
-  const fetchAllReviews = async () => {
+  const fetchReviews = async () => {
     try {
-      const response = await axios.get(`${Api}/admin/reviews`);
+      let response;
+
+      if (productIdFilter && productIdFilter !== '0') {
+        response = await axios.get(`${Api}/reviews/${productIdFilter}`, {
+          params: {
+            rating: filterStar !== 'all' ? filterStar : undefined,
+          },
+        });
+      } else {
+        response = await axios.get(`${Api}/admin/reviews`);
+      }
+
       setReviews(response.data);
     } catch (error) {
       console.error('Lỗi khi tải đánh giá:', error);
@@ -24,8 +34,8 @@ const AdminReviews = () => {
   };
 
   useEffect(() => {
-    fetchAllReviews();
-  }, []);
+    fetchReviews();
+  }, [productIdFilter, filterStar]);
 
   const openReplyModal = (review) => {
     setSelectedReview(review);
@@ -45,7 +55,7 @@ const AdminReviews = () => {
       });
       alert('✅ Đã gửi phản hồi!');
       closeModal();
-      fetchAllReviews();
+      fetchReviews();
     } catch (error) {
       console.error('Lỗi khi gửi phản hồi:', error);
       alert('❌ Lỗi khi gửi phản hồi');
@@ -53,9 +63,7 @@ const AdminReviews = () => {
   };
 
   const filteredReviews = reviews.filter((review) => {
-    const matchStar = filterStar === 'all' || review.rating === parseInt(filterStar);
-    const matchUser = review.username.toLowerCase().includes(searchUser.toLowerCase());
-    return matchStar && matchUser;
+    return filterStar === 'all' || review.rating === parseInt(filterStar);
   });
 
   if (loading) return <p>Đang tải đánh giá...</p>;
@@ -66,7 +74,15 @@ const AdminReviews = () => {
 
       {/* Bộ lọc */}
       <Row className="mb-3">
-        <Col md={4}>
+        <Col md={3}>
+          <Form.Control
+            type="text"
+            placeholder="Nhập ID sản phẩm..."
+            value={productIdFilter}
+            onChange={(e) => setProductIdFilter(e.target.value)}
+          />
+        </Col>
+        <Col md={3}>
           <Form.Select
             value={filterStar}
             onChange={(e) => setFilterStar(e.target.value)}
@@ -78,14 +94,6 @@ const AdminReviews = () => {
             <option value="2">2 ⭐</option>
             <option value="1">1 ⭐</option>
           </Form.Select>
-        </Col>
-        <Col md={4}>
-          <Form.Control
-            type="text"
-            placeholder="Tìm theo tên người dùng..."
-            value={searchUser}
-            onChange={(e) => setSearchUser(e.target.value)}
-          />
         </Col>
       </Row>
 

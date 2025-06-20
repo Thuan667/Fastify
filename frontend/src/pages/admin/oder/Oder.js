@@ -247,13 +247,13 @@ const handleStatusChange = (orderId, status) => {
           >
             Sửa
           </button> */}
-          <button
+          {/* <button
             className="btn btn-danger ms-2"
             onClick={() => handleDeleteOrder(order.id)}
           >
             Xóa
           </button>
-         
+          */}
         </td>
      <td>
   <select

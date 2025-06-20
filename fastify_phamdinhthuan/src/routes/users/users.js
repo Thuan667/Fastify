@@ -9,5 +9,7 @@ module.exports = function(fastify, opts, done){
     fastify.post('/api/users',{schema:usersSchema.createUserSchema},usersHandler.createUser);
     fastify.delete('/api/users/:id',{schema:usersSchema.deleteUserSchema},usersHandler.deleteUser);
     fastify.put('/api/users/:id',{schema:usersSchema.updateUserSchema},usersHandler.updateUser);
+     fastify.put('/api/users/:id/lock', usersHandler.lockUser);
+    fastify.put('/api/users/:id/unlock', usersHandler.unlockUser);
     done();
 }

@@ -80,7 +80,8 @@ function getAll(req, res) {
                         phone: user.phone,
                         role: user.role,
                         created_at: user.created_at,
-                        updated_at: user.updated_at
+                        updated_at: user.updated_at,
+                        is_locked:user.is_locked,
                     }
                 })),
                 meta: {
@@ -189,24 +190,42 @@ async function login(req, res) {
     try {
         const { email, password } = req.body;
         const user = await usersService.login(this.mysql, { email });
+
+        // 1. Email không tồn tại
         if (!user) {
-            res.status(401).send({ error: 'Unauthorized' });
+            res.status(401).send({ code: 'INVALID', message: 'Email hoặc mật khẩu không đúng' });
             return;
         }
+
+        // 2. Tài khoản bị khóa
+        if (user.is_locked) {
+            res.status(403).send({ code: 'LOCKED', message: 'Tài khoản bị khóa' });
+            return;
+        }
+
+        // 3. Kiểm tra mật khẩu
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            res.status(401).send({ error: 'Unauthoried' });
+            res.status(401).send({ code: 'INVALID', message: 'Email hoặc mật khẩu không đúng' });
             return;
         }
-        // tao jwt token
+
+        // 4. Tạo JWT token
         const secretKey = process.env.JWT_SECRET_KEY;
         if (!secretKey) {
-            console.error('JWT_SECRET_KEY is not set in enviroment variables');
+            console.error('JWT_SECRET_KEY is not set in environment variables');
             res.status(500).send({ error: 'Internal Server Error' });
             return;
         }
-        const token = jwt.sign({ id: user.id, name: user.username,  role: user.role , phone: user.phone,
-                email: user.email,}, secretKey, { expiresIn: '2h' });
+
+        const token = jwt.sign({
+            id: user.id,
+            name: user.username,
+            role: user.role,
+            phone: user.phone,
+            email: user.email,
+        }, secretKey, { expiresIn: '2h' });
+
         const response = {
             jwt: token,
             user: {
@@ -217,12 +236,15 @@ async function login(req, res) {
                 role: user.role,
             }
         };
+
         res.send(response);
+
     } catch (err) {
         console.error("Database or bcrypt error", err);
         res.status(500).send({ error: "Internal server error" });
     }
 }
+
 async function deleteUser(req, res) {
     const { id } = req.params;
 
@@ -277,6 +299,37 @@ async function updateUser(req, res) {
         res.status(500).send({ error: err.message });
     }
 }
+// Khóa tài khoản người dùng
+async function lockUser(req, res) {
+    const { id } = req.params;
+
+    try {
+        const result = await usersService.updateUserLockStatus(this.mysql, id, true); // true => khóa
+        if (result.affectedRows === 0) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+        res.send({ message: 'Tài khoản đã bị khóa' });
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).send({ error: 'Lỗi khi khóa tài khoản' });
+    }
+}
+
+// Mở khóa tài khoản người dùng
+async function unlockUser(req, res) {
+    const { id } = req.params;
+
+    try {
+        const result = await usersService.updateUserLockStatus(this.mysql, id, false); // false => mở
+        if (result.affectedRows === 0) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+        res.send({ message: 'Tài khoản đã được mở khóa' });
+    } catch (err) {
+        console.error('Database error:', err);
+        res.status(500).send({ error: 'Lỗi khi mở khóa tài khoản' });
+    }
+}
 
 module.exports = {
     createUser,
@@ -285,4 +338,6 @@ module.exports = {
     login,
     deleteUser,
     updateUser,
+      lockUser,    
+    unlockUser,
 }

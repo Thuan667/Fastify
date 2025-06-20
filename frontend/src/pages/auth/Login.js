@@ -25,28 +25,49 @@ function Login(props) {
     };
 
     const refreshPage = () => {
-        refreshPage();
-
+ window.location.reload();
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setLoading(true);
+ const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(false); // reset lỗi trước đó
 
-        axios.post(`${Api}/users/login`, { email, password })
-            .then(result => {
-                console.log("Login success", result.data); 
-                localStorage.setItem('token', result.data.jwt);
-                props.addUser(result.data.user);
-                setShow(false);
-                setLoading(false);
-                refreshPage();
-            })
-            .catch(error => {
-                setError(true);
-                setLoading(false);
-            });
-    };
+    axios.post(`${Api}/users/login`, { email, password })
+        .then(result => {
+            const user = result.data.user;
+
+            // Kiểm tra nếu tài khoản bị khóa nằm trong .then() (chỉ dùng khi backend trả HTTP 200)
+            // Nếu backend không trả HTTP 200 thì bỏ đoạn này
+
+            localStorage.setItem('token', result.data.jwt);
+            props.addUser(user);
+            setShow(false);
+            setLoading(false);
+            refreshPage();
+        })
+        .catch(error => {
+            console.log("Login error:", error.response?.data); // Debug xem lỗi gì
+
+            // Nếu backend trả mã lỗi trong response
+            if (error.response) {
+                const res = error.response.data;
+
+                // Kiểm tra nếu là tài khoản bị khóa
+                if (res.code === "LOCKED" || res.message?.toLowerCase().includes("khóa")) {
+                    setError("locked");
+                } else {
+                    setError("invalid"); // Sai mật khẩu/email
+                }
+            } else {
+                setError("invalid"); // Lỗi không xác định
+            }
+
+            setLoading(false);
+        });
+};
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -65,14 +86,24 @@ function Login(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <form className="auth" onSubmit={handleSubmit}>
-                        {error && (
-                            <div className="form-alert">
-                                <Alert variant='danger'>
-                                  Sai mật khẩu hoặc email!
-                                    <i className="fa fa-exclamation-triangle"></i>
-                                </Alert>
-                            </div>
-                        )}
+                      {error === "invalid" && (
+    <div className="form-alert">
+        <Alert variant="danger">
+            Sai mật khẩu hoặc email!
+            <i className="fa fa-exclamation-triangle"></i>
+        </Alert>
+    </div>
+)}
+
+{error === "locked" && (
+    <div className="form-alert">
+        <Alert variant="warning">
+            Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên!
+            <i className="fa fa-lock"></i>
+        </Alert>
+    </div>
+)}
+
                         <div className="form-group">
                             <input
                                 type="email"

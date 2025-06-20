@@ -35,7 +35,7 @@ const getAll = async (db, page, limit) => {
 
                 // Lấy danh sách người dùng phân trang
                 db.query(
-                    'SELECT id, username, email, name, address, phone, role, created_at, updated_at FROM users LIMIT ?, ?',
+                    'SELECT id, username, email, name, address, phone, role, created_at, updated_at, is_locked FROM users LIMIT ?, ?',
                     [(page - 1) * limit, limit],
                     (err, users) => {
                         if (err) {
@@ -198,6 +198,19 @@ const login = async (db, { email }) => {
         }
     });
 };
+// Khóa hoặc mở khóa tài khoản
+const updateUserLockStatus = (db, id, isLocked) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE users SET is_locked = ? WHERE id = ?';
+        db.query(sql, [isLocked, id], (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(result);
+        });
+    });
+};
+
 
 module.exports = {
     createUser,
@@ -206,4 +219,5 @@ module.exports = {
     login,
     deleteUser,
     updateUser,
+    updateUserLockStatus,
 }

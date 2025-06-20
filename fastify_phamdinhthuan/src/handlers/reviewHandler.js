@@ -4,6 +4,8 @@ const {
   getReviewsByProduct,
   replyToReview,
    getAllReviews, 
+   getReviewsByProductId,
+   checkReviewExists
 } = require('../services/reviewService');
 async function getAllReviewsHandler(request, reply) {
   try {
@@ -24,9 +26,18 @@ async function createReviewHandler(request, reply) {
     reply.code(201).send({ message: 'Đánh giá đã được ghi nhận' });
   } catch (err) {
     console.error('❌ Lỗi khi tạo đánh giá:', err);
-    reply.code(500).send({ message: 'Lỗi khi tạo đánh giá' });
+
+    // Xử lý lỗi custom từ service
+    if (err.message === 'Bạn chưa mua sản phẩm này nên không thể đánh giá.') {
+      reply.code(403).send({ message: err.message });
+    } else if (err.message === 'Bạn đã đánh giá sản phẩm này rồi.') {
+      reply.code(409).send({ message: err.message });
+    } else {
+      reply.code(500).send({ message: 'Lỗi máy chủ khi tạo đánh giá' });
+    }
   }
 }
+
 
 async function getReviewsHandler(request, reply) {
   const { productId } = request.params;
@@ -52,10 +63,36 @@ async function adminReplyHandler(request, reply) {
     reply.code(500).send({ message: 'Lỗi khi phản hồi đánh giá' });
   }
 }
+const getReviewsByProductIdHandler = async (req, reply) => {
+  const { productId } = req.params;
+  const { rating } = req.query;
+
+  try {
+    const reviews = await getReviewsByProductId(req.server.mysql, productId, rating);
+    reply.send(reviews);
+  } catch (err) {
+    console.error('Error in getReviewsByProductId handler:', err);
+    reply.status(500).send({ error: 'Internal Server Error' });
+  }
+};
+async function checkReviewHandler(request, reply) {
+  const { productId } = request.params;
+  const userId = request.user?.id || 1;
+
+  try {
+    const reviewed = await checkReviewExists(request.server.mysql, productId, userId);
+    reply.send({ reviewed });
+  } catch (err) {
+    console.error("❌ Lỗi khi kiểm tra đánh giá:", err);
+    reply.code(500).send({ reviewed: false, message: "Lỗi khi kiểm tra đánh giá" });
+  }
+}
 
 module.exports = {
   createReviewHandler,
   getReviewsHandler,
   adminReplyHandler,
-  getAllReviewsHandler
+  getAllReviewsHandler,
+   getReviewsByProductId: getReviewsByProductIdHandler,
+   checkReviewHandler,
 };

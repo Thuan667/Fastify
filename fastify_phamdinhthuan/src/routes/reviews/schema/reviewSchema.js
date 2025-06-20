@@ -5,7 +5,6 @@ const reviewSchema = {
   properties: {
     rating: { type: 'integer', minimum: 1, maximum: 5 },
     comment: { type: 'string' },
-      username: { type: 'string' },
   }
 };
 

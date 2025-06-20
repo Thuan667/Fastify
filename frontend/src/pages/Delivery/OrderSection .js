@@ -137,7 +137,7 @@ const OrderSection = () => {
                 <Link className={showWait === true ? "tab active" : "tab"} onClick={() => handleShowWait()}>Chờ giao hàng</Link>
                 <Link className={showFinish === true ? "tab active" : "tab"} onClick={() => handleShowFinish()}>Hoàn thành</Link>
                 <Link className={showCancel === true ? "tab active" : "tab"} onClick={() => handleShowCancel()}>Đã hủy</Link>
-                <Link className={showRefund === true ? "tab active" : "tab"} onClick={() => handleShowRefund()}>Trả hàng/Hoàn tiền</Link>
+                {/* <Link className={showRefund === true ? "tab active" : "tab"} onClick={() => handleShowRefund()}>Trả hàng/Hoàn tiền</Link> */}
             </div>
             <div className="order_section p-2">
 

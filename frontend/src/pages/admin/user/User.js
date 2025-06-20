@@ -22,6 +22,7 @@ const User = () => {
     const getUser = async () => {
         try {
             const response = await axios.get(`${Api}/users`);
+             console.log("Dữ liệu người dùng:", response.data.data); 
             setUsers(response.data.data);
         } catch (error) {
             console.error("Error ", error);
@@ -111,6 +112,27 @@ const User = () => {
             Swal.fire("Lỗi", "Không thể tạo người dùng", "error");
         }
     };
+const lockUser = async (id) => {
+    try {
+        await axios.put(`${Api}/users/${id}/lock`);
+        Swal.fire("Đã chặn", "Người dùng đã bị chặn", "success");
+        getUser();
+    } catch (error) {
+        console.error("Lỗi khi chặn người dùng", error);
+        Swal.fire("Lỗi", "Không thể chặn người dùng", "error");
+    }
+};
+
+const unlockUser = async (id) => {
+    try {
+        await axios.put(`${Api}/users/${id}/unlock`);
+        Swal.fire("Đã mở chặn", "Người dùng đã được mở chặn", "success");
+        getUser();
+    } catch (error) {
+        console.error("Lỗi khi mở chặn người dùng", error);
+        Swal.fire("Lỗi", "Không thể mở chặn người dùng", "error");
+    }
+};
 
     return (
         <div className="container-fluid">
@@ -209,6 +231,7 @@ const User = () => {
                                     <th>Ngày tạo</th>
                                     <th>Ngày cập nhật</th>
                                     <th>Hành động</th>
+                                    <th>Trạng thái</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -228,10 +251,18 @@ const User = () => {
                                                 <td>{attributes.role}</td>
                                                 <td>{new Date(attributes.created_at).toLocaleString()}</td>
                                                 <td>{new Date(attributes.updated_at).toLocaleString()}</td>
-                                                <td>
-                                                    <Button variant="warning" className="me-2" onClick={() => handleEdit(user)}>✏️Sửa</Button>
-                                                    <Button variant="danger" onClick={() => deleteUser(id)}>🗑Xóa</Button>
-                                                </td>
+<td>{parseInt(attributes.is_locked) === 1 ? 'Đã chặn' : 'Hoạt động'}</td>
+                                              <td>
+    <Button variant="warning" className="me-2" onClick={() => handleEdit(user)}>✏️Sửa</Button>
+    <Button variant="danger" className="me-2" onClick={() => deleteUser(id)}>🗑Xóa</Button>
+   {parseInt(attributes.is_locked) === 1 ? (
+    <Button variant="success" onClick={() => unlockUser(id)}>🔓 Mở chặn</Button>
+) : (
+    <Button variant="secondary" onClick={() => lockUser(id)}>🔒 Chặn</Button>
+)}
+
+</td>
+
                                             </tr>
                                         );
                                     })
