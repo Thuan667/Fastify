@@ -29,6 +29,7 @@ import FeedbackPage from "./pages/phanHoi/FeedbackPage";
 import News from "./pages/tinTuc/News";
 import ContactForm from "./pages/lienHe/ContactForm";
 import ProfilePage from "./pages/thongTin/ProfilePage";
+import PostList from "./pages/pots/PostList";
 
 function App() {
   return (
@@ -59,7 +60,8 @@ function App() {
           <Route  path="/tin-tuc" element={<News />} />
       <Route  path="/lien-he" element={<ContactForm />} />
             <Route path="thong-tin" element={<ProfilePage/>} />
-      
+            <Route  path="/bai-viet" element={<PostList />} />
+
       </Route>
 
 

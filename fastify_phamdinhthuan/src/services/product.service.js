@@ -85,26 +85,38 @@ const getOne = async (db, productId) => {
     });
 };
 
-function searchProductsByName(db, name) {
+function searchProductsByName(db, { name, product_category, min_price, max_price }) {
   return new Promise((resolve, reject) => {
-    db.query(
-      'SELECT * FROM products WHERE product_name LIKE ?',
-      [`%${name}%`],
-      (err, results) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        if (results.length === 0) {
-          resolve({ data: [], meta: { pagination: {} } });
-          return;
-        }
-        resolve({
-          data: results,
-          meta: { pagination: {} }
-        });
-      }
-    );
+    let sql = 'SELECT * FROM products WHERE 1=1';
+    const params = [];
+
+    if (name) {
+      sql += ' AND product_name LIKE ?';
+      params.push(`%${name}%`);
+    }
+
+    if (product_category) {
+      sql += ' AND product_category = ?';
+      params.push(product_category);
+    }
+
+    if (min_price) {
+      sql += ' AND price >= ?';
+      params.push(min_price);
+    }
+
+    if (max_price) {
+      sql += ' AND price <= ?';
+      params.push(max_price);
+    }
+
+    db.query(sql, params, (err, results) => {
+      if (err) return reject(err);
+      resolve({
+        data: results,
+        meta: { pagination: {} }
+      });
+    });
   });
 }
 

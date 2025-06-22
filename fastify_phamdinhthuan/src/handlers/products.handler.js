@@ -143,37 +143,41 @@ function updateProduct(req, res) {
         res.status(500).send({ error: 'Lỗi máy chủ nội bộ' });
       });
   }
-  function searchProducts(req, res) {
-    const { name } = req.query;
-    productsService.searchProductsByName(this.mysql, name)
-      .then((result) => {
-        if (!result || !result.data || result.data.length === 0) {
-          res.status(404).send({ error: 'No products found' });
-          return;
-        }
-  
-        const formattedResult = {
-          data: result.data.map(product => ({
-            id: product.id,
-            product_name: product.product_name,
-            description: product.description,
-            price: product.price,
-            image: product.image,
-            sale: product.sale,
-            sale_price: product.sale_price,
-            slug: product.slug,
-            created_at: product.created_at,
-            status: product.status
-          })),
-          meta: result.meta || { pagination: {} }
-        };
-        res.send(formattedResult);
-      })
-      .catch((err) => {
-        console.error('Database error:', err);
-        res.status(500).send({ error: 'Internal server error' });
-      });
-  }
+function searchProducts(req, res) {
+  const { name, product_category, min_price, max_price } = req.query;
+
+  productsService
+    .searchProductsByName(this.mysql, { name, product_category, min_price, max_price })
+    .then((result) => {
+      if (!result || !result.data || result.data.length === 0) {
+        res.status(404).send({ error: 'Không tìm thấy sản phẩm phù hợp' });
+        return;
+      }
+
+      const formattedResult = {
+        data: result.data.map((product) => ({
+          id: product.id,
+          product_name: product.product_name,
+          description: product.description,
+          price: product.price,
+          image: product.image,
+          sale: product.sale,
+          sale_price: product.sale_price,
+          slug: product.slug,
+          created_at: product.created_at,
+          status: product.status
+        })),
+        meta: result.meta || { pagination: {} }
+      };
+
+      res.send(formattedResult);
+    })
+    .catch((err) => {
+      console.error('Database error:', err);
+      res.status(500).send({ error: 'Internal server error' });
+    });
+}
+
   
   
 

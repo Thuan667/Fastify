@@ -11,8 +11,8 @@ const MyAccount = () => {
             <section style={{ marginBottom: '20px' }}>
                 <h2 style={{ color: '#007bff', marginBottom: '10px', fontSize: '2em' }}>Thông Tin Cá Nhân</h2>
                 <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '8px', backgroundColor: '#fff' }}>
-                    <p><strong>Họ và Tên:</strong> ductai</p>
-                    <p><strong>Email:</strong> ductai@example.com</p>
+                    <p><strong>Họ và Tên:</strong> thuan</p>
+                    <p><strong>Email:</strong> thuan@example.com</p>
                     <p><strong>Số Điện Thoại:</strong> (012) 345-6789</p>
                     <p><strong>Địa Chỉ:</strong> 123 Đường Thời Trang </p>
                 </div>

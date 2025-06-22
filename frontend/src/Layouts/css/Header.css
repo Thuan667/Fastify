@@ -20,7 +20,7 @@
   top: 0;
   width: 100%;
   z-index: 1000;
-  background-color: rgb(240, 102, 109); 
+  background-color: rgb(111, 102, 240); 
   box-shadow: 0 2px 5px rgba(235, 229, 229, 0.1); /* Tạo hiệu ứng đổ bóng */
 }
 

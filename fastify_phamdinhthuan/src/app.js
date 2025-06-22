@@ -136,7 +136,8 @@ fastify.register(require('./routes/banner/banner'));
 fastify.register(require('./routes/Vnpay/vnpay.routes'));
 fastify.register(require('./routes/reviews/review'));
 fastify.register(require('./routes/feedback/feedback'));
-fastify.register(require('./routes//statistics/stats.route'));
+fastify.register(require('./routes/statistics/stats.route'));
+fastify.register(require('./routes/pots/pots'));
 
 
 

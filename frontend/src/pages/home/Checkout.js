@@ -187,7 +187,7 @@ class Checkout extends Component {
             this.props.clearCart?.();
     
             alert("Thanh toán thành công và giỏ hàng đã được xóa.");
-            
+            window.location.href = '/track-oder';
         } catch (error) {
             console.error('Order error:', error);
             alert('Đặt hàng thất bại. Vui lòng thử lại!');

@@ -18,9 +18,7 @@ const UserLayout = () => {
             <Banner />
             <Nav />
             <Sport />
-           
             <Main />
-         
             <Footer />
           
         </div>

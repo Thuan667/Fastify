@@ -16,6 +16,7 @@ import Index from "../pages/Delivery/index";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import ResetPassword from "../pages/ForgotPassword/ResetPassword";
 import Myaccount from "../pages/home/myaccount";
+import PostList from "../pages/pots/PostList";
 
 
 
@@ -38,7 +39,7 @@ const Main = () => (
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/my-account" element={<Myaccount />} />
-
+      <Route  path="/bai-viet" element={<PostList />} />
     </Routes>
   </main>
 );

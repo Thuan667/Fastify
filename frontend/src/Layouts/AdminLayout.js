@@ -13,6 +13,7 @@ import Banner from '../pages/admin/banner/Banner';
 import Feedback from '../pages/admin/feedback/feedback';
 import AdminReviews from '../pages/admin/reviews/reviews';
 import Statistisc from '../pages/admin/statistisc/Statistisc';
+import PostList from '../pages/admin/pots/PostList';
 
 function PrivateRoute({ element, allowedRoles, ...rest }) {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -44,6 +45,7 @@ function AdminLayout() {
                 <Route path="/statistics" element={<PrivateRoute element={<Statistisc />} allowedRoles={["admin"]} />} />
                 <Route path="/feedback" element={<PrivateRoute element={<Feedback />} allowedRoles={["admin"]} />} />
                 <Route path="/reviews" element={<PrivateRoute element={<AdminReviews />} allowedRoles={["admin"]} />} />
+                <Route path="/pots" element={<PrivateRoute element={<PostList />} allowedRoles={["admin"]} />} />
 
                 
             </Routes>

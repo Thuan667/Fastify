@@ -41,9 +41,9 @@ const Nav = () => (
                     <li><Link to="/">Trang chủ</Link></li>
                     <li><Link to="/product">Sản phẩm</Link></li>
                     <li><Link to="/tin-tuc">Tin tức</Link></li>
-                    <li><Link to="/lien-he">Liên hệ</Link></li>
+                    <li><Link to="/bai-viet">Bài viết</Link></li>
                     <li><Link to="/phan-hoi">Phản hồi</Link></li>
-                    <li><Link to="/thong-tin">Thông tin</Link></li>
+                    {/* <li><Link to="/thong-tin">Thông tin</Link></li> */}
                 </ul>
             </div>
         </div>

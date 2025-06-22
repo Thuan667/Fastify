@@ -22,12 +22,13 @@ const Myaccount = () => {
   useEffect(() => {
     if (user) {
       setFormData({
-        username: user.username || "",
-        email: user.email || "",
         name: user.name || "",
+        email: user.email || "",
+        namename: user.namename || "",
         address: user.address || "",
         phone: user.phone || "",
         password: "",
+        
       });
     }
   }, [user]);
@@ -36,25 +37,28 @@ const Myaccount = () => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleUpdate = async () => {
-    try {
-      const token = localStorage.getItem("token");
+ const handleUpdate = async () => {
+  try {
+    const token = localStorage.getItem("token");
 
-      await axios.put(`${Api}/users/${user.id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    // 👉 Log dữ liệu formData ra console để kiểm tra
+    console.log("📦 Dữ liệu gửi đi cập nhật:", formData);
 
-      Swal.fire("Thành công", "Thông tin tài khoản đã được cập nhật", "success");
+    await axios.put(`${Api}/users/${user.id}`, formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      // Cập nhật Redux sau khi update thành công
-      dispatch({ type: "USER", value: { ...user, ...formData } });
-      localStorage.setItem("user", JSON.stringify({ ...user, ...formData }));
-         navigate("/");
-    } catch (error) {
-      console.error("Lỗi khi cập nhật tài khoản:", error);
-      Swal.fire("Lỗi", "Không thể cập nhật thông tin", "error");
-    }
-  };
+    Swal.fire("Thành công", "Thông tin tài khoản đã được cập nhật", "success");
+
+    dispatch({ type: "USER", value: { ...user, ...formData } });
+    localStorage.setItem("user", JSON.stringify({ ...user, ...formData }));
+    navigate("/");
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật tài khoản:", error);
+    Swal.fire("Lỗi", "Không thể cập nhật thông tin", "error");
+  }
+};
+
 
   return (
     <div className="container py-4">
@@ -64,7 +68,7 @@ const Myaccount = () => {
           <label>Username</label>
           <input
             className="form-control"
-            value={formData.username}
+            value={formData.name}
             disabled
           />
         </div>
@@ -83,7 +87,7 @@ const Myaccount = () => {
           <input
             className="form-control"
             name="name"
-            value={formData.name}
+            value={formData.namename}
             onChange={handleChange}
           />
         </div>

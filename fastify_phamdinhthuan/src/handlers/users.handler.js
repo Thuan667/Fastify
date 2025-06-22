@@ -224,6 +224,7 @@ async function login(req, res) {
             role: user.role,
             phone: user.phone,
             email: user.email,
+            namename:user.name,
         }, secretKey, { expiresIn: '2h' });
 
         const response = {
@@ -234,6 +235,7 @@ async function login(req, res) {
                 phone: user.phone,
                 email: user.email,
                 role: user.role,
+                 namename:user.name,
             }
         };
 

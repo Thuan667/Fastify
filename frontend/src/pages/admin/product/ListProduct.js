@@ -79,7 +79,7 @@ class ListProduct extends Component {
         this.getTrashedProducts();
       })
       .catch((err) => {
-         Swal.fire("Lỗi khi xóa mềm sản phẩm:Sản phẩm đang tồn tại trong giỏ hàng hoặc danh sách yêu thích. Không thể xóa.", err);
+         Swal.fire("Sản phẩm đang tồn tại trong giỏ hàng hoặc danh sách yêu thích. Không thể xóa.", err);
         
       });
   };

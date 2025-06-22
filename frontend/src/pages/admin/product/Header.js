@@ -66,6 +66,11 @@ const Header = () => {
               <FaInfoCircle className="me-2" /> Quản Lý PH Đánh Giá
             </Link>
           </li>
+           <li className="nav-item">
+            <Link className="nav-link text-white" to="/admin/pots">
+              <FaChartBar className="me-2" /> Quản Lý Bài Viết
+            </Link>
+          </li>
           <li className="nav-item">
             <Link className="nav-link text-white" to="/admin/statistics">
               <FaChartBar className="me-2" /> Quản Lý Thống Kê

@@ -1,11 +1,13 @@
 const searchProductSchema = {
-  description: 'Tìm kiếm sản phẩm',
+  description: 'Tìm kiếm sản phẩm nâng cao',
   tags: ['product'],
   querystring: {
     type: 'object',
-    required: ['name'],
     properties: {
-      name: { type: 'string' }
+      name: { type: 'string' },
+      product_category: { type: 'string' },
+      min_price: { type: 'number' },
+      max_price: { type: 'number' }
     }
   },
   response: {
@@ -19,6 +21,7 @@ const searchProductSchema = {
             properties: {
               id: { type: 'integer' },
               product_name: { type: 'string' },
+              product_category: { type: 'string' },
               description: { type: 'string' },
               price: { type: 'number' },
               image: { type: 'string' },
@@ -28,7 +31,7 @@ const searchProductSchema = {
               created_at: { type: 'string' },
               status: { type: 'string' }
             },
-            required: ['id', 'product_name'] // Đảm bảo 'id' là bắt buộc
+            required: ['id', 'product_name']
           }
         },
         meta: {
